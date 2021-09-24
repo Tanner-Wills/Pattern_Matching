@@ -40,15 +40,15 @@ public class PatternMatching {
         int i = 0;
         while(i <= m-1){
             int j = m-1;
-            while(j >= 0 && text[i+j] = pattern[j])
+            while(j >= 0 && text.charAt(i+j) == pattern.charAt(j))
                 j --;
 
-            if(j = -1)
+            if(j == -1)
                 return i; // pattern found
 
             //text and pattern do not match
             else{
-                int shift = last[text[i+j]];
+                int shift = buildLastTable(text.charAt(i+j));
                 if(shift < j)
                     i = i+j-shift;
                 else
@@ -85,11 +85,15 @@ public class PatternMatching {
      */
     public static Map<Character, Integer> buildLastTable(CharSequence pattern) {
         // WRITE YOUR CODE HERE (DO NOT MODIFY METHOD HEADER)!
-        Map<Character,Integer> lastTable = Map.of(pattern);
-        for(int i = 0; i < pattern.length(); i++){
-            if(lastTable.containsKey(pattern[i]))
-                lastTable.put(pattern[i], i);
+        Map<Character,Integer> lastTable = new HashMap<>(pattern.length());
+        if(!pattern.isEmpty()) {
+            for (int i = 0; i < pattern.length(); i++) {
+                if (lastTable.containsKey(pattern.charAt(i)))
+                    lastTable.replace(pattern.charAt(i), i);
+                else
+                    lastTable.put(pattern.charAt(i), i);
+            }
         }
-
+        return lastTable;
     }
 }
