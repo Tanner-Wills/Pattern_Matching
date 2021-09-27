@@ -1,8 +1,4 @@
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Your implementations of the Boyer Moore string searching algorithm.
@@ -35,27 +31,33 @@ public class PatternMatching {
          * return last
          */
 
-        int m = pattern.length();
-        Map<Character, Integer> last = buildLastTable(pattern);
+
+
         int i = 0;
-        while(i <= m-1){
-            int j = m-1;
-            while(j >= 0 && text.charAt(i+j) == pattern.charAt(j))
+        ArrayList<Integer> patternIndex = new ArrayList<>();
+        Map<Character, Integer> last = buildLastTable(pattern);
+
+        while(i <= text.length() - pattern.length()){
+            int j = pattern.length() - 1;
+            while(j >= 0 && comparator.compare(text.charAt(i+j),pattern.charAt(j)) == 0)
                 j --;
 
-            if(j == -1)
-                return i; // pattern found
+            if(j == -1) {
+                patternIndex.add(i); // pattern found
+                i += pattern.length();
 
-            //text and pattern do not match
-            else{
-                int shift = buildLastTable(text.charAt(i+j));
+                //text and pattern do not match
+            }else{
+                int shift = last.getOrDefault(text.charAt(i + j),i);
                 if(shift < j)
                     i = i+j-shift;
                 else
-                    i = i+l;
+                    i++;
             }
         }
-        return pattern; //not found
+        System.out.println("Pattern occurs at index(s): " + patternIndex);
+        return patternIndex;
+
     }
 
     /**
@@ -93,6 +95,9 @@ public class PatternMatching {
                 else
                     lastTable.put(pattern.charAt(i), i);
             }
+        }
+        else{
+            throw new NoSuchElementException("Pattern entry is empty!");
         }
         return lastTable;
     }
