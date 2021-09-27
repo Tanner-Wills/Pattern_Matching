@@ -21,17 +21,6 @@ public class PatternMatching {
      * @return           List containing the starting index for each match found.
      */
     public static List<Integer> boyerMoore(CharSequence pattern, CharSequence text, CharacterComparator comparator) {
-        // WRITE YOUR CODE HERE (DO NOT MODIFY METHOD HEADER)!
-        /**
-         * m = pattern.length
-         * last = HashMap <character,index>
-         * for all(i from 0 to m-l)
-         *     last = put(pattern[i],i)
-         * end for
-         * return last
-         */
-
-
 
         int i = 0;
         ArrayList<Integer> patternIndex = new ArrayList<>();
@@ -43,21 +32,20 @@ public class PatternMatching {
                 j --;
 
             if(j == -1) {
-                patternIndex.add(i); // pattern found
-                i += pattern.length();
+                patternIndex.add(i); // pattern found, add index to the list.
+                i ++;
 
                 //text and pattern do not match
             }else{
-                int shift = last.getOrDefault(text.charAt(i + j),i);
+                int shift = last.getOrDefault(text.charAt(i + j),-1);
                 if(shift < j)
-                    i = i+j-shift;
+                    i += j-shift;
                 else
                     i++;
             }
         }
         System.out.println("Pattern occurs at index(s): " + patternIndex);
         return patternIndex;
-
     }
 
     /**
@@ -89,16 +77,12 @@ public class PatternMatching {
         // WRITE YOUR CODE HERE (DO NOT MODIFY METHOD HEADER)!
         Map<Character,Integer> lastTable = new HashMap<>(pattern.length());
         if(!pattern.isEmpty()) {
-            for (int i = 0; i < pattern.length(); i++) {
-                if (lastTable.containsKey(pattern.charAt(i)))
-                    lastTable.replace(pattern.charAt(i), i);
-                else
-                    lastTable.put(pattern.charAt(i), i);
-            }
-        }
-        else{
+            for (int i = 0; i < pattern.length(); i++)
+                lastTable.put(pattern.charAt(i), i);
+
+        } else
             throw new NoSuchElementException("Pattern entry is empty!");
-        }
+
         return lastTable;
     }
 }
