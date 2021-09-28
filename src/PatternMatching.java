@@ -29,11 +29,11 @@ public class PatternMatching {
         while(i <= text.length() - pattern.length()){
             int j = pattern.length() - 1;
             while(j >= 0 && comparator.compare(text.charAt(i+j),pattern.charAt(j)) == 0)
-                j --;
+                j--;
 
             if(j == -1) {
                 patternIndex.add(i); // pattern found, add index to the list.
-                i ++;
+                i++;
 
                 //text and pattern do not match
             }else{
